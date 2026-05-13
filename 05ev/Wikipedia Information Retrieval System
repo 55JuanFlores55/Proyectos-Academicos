@@ -1,1 +1,87 @@
+Wikipedia Information Retrieval System
 
+Proyecto de recuperación de información utilizando técnicas clásicas de procesamiento de lenguaje natural (NLP) sobre un corpus de artículos de Wikipedia.
+
+Descripción
+
+Este proyecto implementa un sistema de recuperación de documentos utilizando:
+
+TF-IDF (Term Frequency - Inverse Document Frequency)
+BM25
+Similaridad del coseno
+Preprocesamiento de texto con NLTK
+
+El objetivo es comparar distintos métodos clásicos de Information Retrieval (IR) para encontrar los documentos más relevantes dentro de un corpus de Wikipedia a partir de consultas en lenguaje natural.
+
+Tecnologías utilizadas
+Python
+Pandas
+NumPy
+Scikit-learn
+NLTK
+rank_bm25
+Jupyter Notebook
+Estructura del proyecto
+├── 05ev.ipynb
+├── wikipedia_text_corpus.csv
+├── README.md
+Funcionalidades
+Carga de corpus CSV
+Limpieza y preprocesamiento de texto
+Eliminación de stopwords
+Tokenización
+Vectorización TF-IDF
+Recuperación de documentos mediante similitud del coseno
+Ranking de documentos con BM25
+Comparación entre TF-IDF y BM25
+Instalación
+
+Clona el repositorio:
+
+git clone https://github.com/tu-usuario/tu-repositorio.git
+
+Ingresa al proyecto:
+
+cd tu-repositorio
+
+Instala las dependencias:
+
+pip install pandas numpy scikit-learn nltk rank_bm25
+Descarga de recursos NLTK
+
+Antes de ejecutar el notebook, descarga los recursos necesarios:
+
+import nltk
+
+nltk.download('punkt')
+nltk.download('punkt_tab')
+nltk.download('stopwords')
+Uso
+Coloca el archivo wikipedia_text_corpus.csv en la ruta correspondiente.
+Abre el notebook:
+jupyter notebook
+Ejecuta todas las celdas.
+Consultas de ejemplo
+
+El sistema permite realizar búsquedas como:
+
+Artificial Intelligence
+Machine Learning
+Climate Change
+Quantum Physics
+Space Exploration
+
+Y devuelve los documentos más relevantes según TF-IDF y BM25.
+
+Objetivo académico
+
+Este proyecto fue desarrollado con fines educativos para comprender:
+
+Recuperación de información
+Procesamiento de lenguaje natural
+Modelos clásicos de búsqueda textual
+Comparación entre TF-IDF y BM25
+Autor
+
+Juan Flores
+Estudiante de Ingeniería en Computación
