@@ -1,11 +1,5 @@
 # 🚴‍♂️ Sales Quota Analysis Dashboard
 
-<div align="center">
-
-![Power BI](https://img.shields.io/badge/Power%20BI-Analytics-yellow?style=for-the-badge\&logo=powerbi)
-![DAX](https://img.shields.io/badge/DAX-Measures-blue?style=for-the-badge)
-![Power Query](https://img.shields.io/badge/Power%20Query-ETL-green?style=for-the-badge)
-
 ### 📊 Business Intelligence Project using Power BI
 
 Dashboard developed to analyze sales performance, quotas, and salesperson efficiency.
