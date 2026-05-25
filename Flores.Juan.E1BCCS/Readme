@@ -1,0 +1,553 @@
+# 🚴 Sales Quota Analysis — Power BI Dashboard
+
+## 📌 Descripción
+
+Este proyecto consiste en desarrollar un dashboard en Power BI para analizar el rendimiento del equipo de ventas de una empresa de equipos de bicicleta.
+
+El análisis compara:
+
+* Ventas reales
+* Cuotas de ventas
+* Rendimiento por vendedor
+* Rendimiento por trimestre
+* Rendimiento por país
+
+---
+
+## 🎯 Objetivos
+
+El dashboard permite:
+
+✅ Comparar ventas vs cuotas
+
+✅ Identificar mejores y peores vendedores
+
+✅ Analizar tendencias trimestrales
+
+✅ Filtrar información por año
+
+✅ Visualizar desempeño geográfico
+
+---
+
+## 🛠 Herramientas utilizadas
+
+* Power BI Desktop
+* Power Query
+* DAX
+* Microsoft Access
+* Excel
+
+---
+
+## 📂 Archivos utilizados
+
+### Base de datos
+
+```text
+SalesRepAnalysis.accdb
+```
+
+### Archivo de cuotas
+
+```text
+SalesQuotas.xlsx
+```
+
+---
+
+## 🧩 Estructura del proyecto
+
+El desarrollo se divide en:
+
+1. Importación de datos
+2. Transformación de datos
+3. Creación del modelo relacional
+4. Creación de medidas DAX
+5. Diseño del dashboard
+
+---
+
+# 📥 1. Importación de datos
+
+## Objetivo
+
+Crear un dashboard en Power BI para analizar:
+
+* Ventas reales
+* Cuotas de ventas
+* Rendimiento de vendedores
+* Comparación por trimestre y país
+
+---
+
+# 1. Crear el archivo Power BI
+
+1. Abrir Power BI Desktop.
+2. Crear un nuevo archivo.
+3. Guardar como:
+
+```text
+SalesRepAnalysis.pbix
+```
+
+---
+
+# 2. Importar datos desde Access
+
+## Archivo
+
+```text
+SalesRepAnalysis.accdb
+```
+
+## Tablas a importar
+
+| Tabla original | Nombre usado |
+| -------------- | ------------ |
+| Employee       | Rep          |
+| SalesTerritory | Territory    |
+| ResellerSales  | Sales        |
+
+Seleccionar:
+
+```text
+Transform Data
+```
+
+---
+
+# 3. Transformaciones en Power Query
+
+## Tabla Rep
+
+Mantener columnas:
+
+* EmployeeKey
+* EmployeeNationalID
+* FirstName
+* LastName
+* MiddleName
+* Title
+
+### Crear columna Name
+
+Agregar columna personalizada:
+
+```powerquery
+FirstName & " " & LastName
+```
+
+Nombre:
+
+```text
+Name
+```
+
+---
+
+## Tabla Territory
+
+Mantener:
+
+* SalesTerritoryKey
+* SalesTerritoryRegion
+* SalesTerritoryCountry
+* SalesTerritoryGroup
+
+---
+
+## Tabla Sales
+
+Mantener:
+
+* OrderDateKey
+* EmployeeKey
+* SalesTerritoryKey
+* SalesAmount
+
+---
+
+# 4. Crear columna OrderDate
+
+## Cambiar tipo de OrderDateKey
+
+Convertir:
+
+```text
+OrderDateKey
+```
+
+a:
+
+```text
+Text
+```
+
+---
+
+## Crear columna personalizada
+
+```powerquery
+Date.FromText(Text.Start([OrderDateKey],4) & "-" &
+Text.Middle([OrderDateKey],4,2) & "-" &
+Text.End([OrderDateKey],2))
+```
+
+Nombre:
+
+```text
+OrderDate
+```
+
+---
+
+# 5. Crear Year y Quarter
+
+## Year
+
+```powerquery
+Date.Year([OrderDate])
+```
+
+## Quarter
+
+```powerquery
+"Q" & Number.ToText(Date.QuarterOfYear([OrderDate]))
+```
+
+---
+
+# 6. Agrupar ventas
+
+Agrupar por:
+
+* EmployeeKey
+* SalesTerritoryKey
+* Year
+* Quarter
+
+Sumando:
+
+```text
+SalesAmount
+```
+
+---
+
+# 7. Crear TimePeriod
+
+```powerquery
+Text.From([Year]) & [Quarter]
+```
+
+Ejemplo:
+
+```text
+2014Q1
+```
+
+Eliminar columnas:
+
+* Year
+* Quarter
+
+---
+
+# 8. Importar cuotas
+
+## Archivo Excel
+
+```text
+SalesQuotas.xlsx
+```
+
+Importar todas las hojas.
+
+---
+
+# 9. Agregar columna Year a cada hoja
+
+Ejemplo para hoja 2014:
+
+```powerquery
+2014
+```
+
+Cambiar tipo de dato a:
+
+```text
+Text
+```
+
+---
+
+# 10. Estructura correcta de cada hoja
+
+Todas las hojas deben tener:
+
+| SalesPerson | Year | Q1 | Q2 | Q3 | Q4 |
+| ----------- | ---- | -- | -- | -- | -- |
+
+Si falta alguna columna:
+
+```powerquery
+null
+```
+
+---
+
+# 11. Append Queries
+
+Ir a:
+
+```text
+Home → Append Queries as New
+```
+
+Seleccionar todas las hojas.
+
+Nombre final:
+
+```text
+Quotas
+```
+
+---
+
+# 12. Unpivot
+
+Seleccionar:
+
+* SalesPerson
+* Year
+
+Luego:
+
+```text
+Transform → Unpivot Other Columns
+```
+
+---
+
+# 13. Renombrar columnas
+
+| Antes     | Después |
+| --------- | ------- |
+| Attribute | Quarter |
+| Value     | Quota   |
+
+---
+
+# 14. Crear TimePeriod en Quotas
+
+```powerquery
+Text.From([Year]) & [Quarter]
+```
+
+Eliminar:
+
+* Year
+* Quarter
+
+---
+
+# 15. Crear tabla Period
+
+Duplicar:
+
+```text
+Quotas
+```
+
+Nombre:
+
+```text
+TimePeriod
+```
+
+Eliminar:
+
+* SalesPerson
+* Quota
+
+Quitar duplicados usando:
+
+```text
+TimePeriod
+```
+
+---
+
+# 16. Relaciones del modelo
+
+## Rep ↔ Sales
+
+```text
+EmployeeKey
+```
+
+## Territory ↔ Sales
+
+```text
+SalesTerritoryKey
+```
+
+## TimePeriod ↔ Sales
+
+```text
+TimePeriod
+```
+
+## TimePeriod ↔ Quotas
+
+```text
+TimePeriod
+```
+
+---
+
+# 17. Medidas DAX
+
+## Total Sales
+
+```DAX
+Total Sales = SUM(Sales[Sales Amount])
+```
+
+## Total Quota
+
+```DAX
+Total Quota = SUM(Quotas[Quota])
+```
+
+## Variance
+
+```DAX
+Variance = [Total Sales] - [Total Quota]
+```
+
+## Percent Variance
+
+```DAX
+Percent Variance =
+DIVIDE([Variance],[Total Quota],BLANK())
+```
+
+---
+
+# 18. Página 1 del Dashboard
+
+## Visuales requeridos
+
+### Slicer
+
+Campo:
+
+```text
+Year
+```
+
+---
+
+### Stacked Column Chart
+
+* Axis → Country
+* Legend → Quarter
+* Values → Total Sales
+
+---
+
+### Cards
+
+* Total Sales
+* Total Quota
+* Variance
+* Percent Variance
+
+---
+
+### Clustered Column Chart
+
+* Axis → Salesperson
+* Values → Total Sales y Total Quota
+
+---
+
+### Título
+
+```text
+Salesperson Performance Dashboard
+```
+
+---
+
+# 19. Página 2 del Dashboard
+
+## Agregar
+
+### Slicer Year
+
+### Slicer Salesperson
+
+---
+
+# TOP 5
+
+Crear tabla con:
+
+* Salesperson
+* Total Sales
+* Total Quota
+* Percent Variance
+
+Aplicar filtro:
+
+```text
+Top N → 5
+```
+
+Usando:
+
+```text
+Percent Variance
+```
+
+---
+
+# Bottom 5
+
+Duplicar la tabla anterior.
+
+Cambiar filtro a:
+
+```text
+Bottom N → 5
+```
+
+---
+
+# Line Chart
+
+## Axis
+
+```text
+TimePeriod
+```
+
+## Values
+
+* Total Sales
+* Total Quota
+
+---
+
+# Resultado esperado
+
+El dashboard permitirá:
+
+* Comparar ventas y cuotas
+* Analizar desempeño de vendedores
+* Ver mejores y peores vendedores
+* Filtrar por año
+* Visualizar ventas por trimestre
