@@ -1,413 +1,135 @@
-# 🚴 Sales Quota Analysis — Power BI Dashboard
+# 🚴‍♂️ Sales Quota Analysis Dashboard
 
-## 📌 Descripción
+<div align="center">
 
-Este proyecto consiste en desarrollar un dashboard en Power BI para analizar el rendimiento del equipo de ventas de una empresa de equipos de bicicleta.
+![Power BI](https://img.shields.io/badge/Power%20BI-Analytics-yellow?style=for-the-badge\&logo=powerbi)
+![DAX](https://img.shields.io/badge/DAX-Measures-blue?style=for-the-badge)
+![Power Query](https://img.shields.io/badge/Power%20Query-ETL-green?style=for-the-badge)
 
-El análisis compara:
+### 📊 Business Intelligence Project using Power BI
 
-* Ventas reales
-* Cuotas de ventas
-* Rendimiento por vendedor
-* Rendimiento por trimestre
-* Rendimiento por país
+Dashboard developed to analyze sales performance, quotas, and salesperson efficiency.
 
----
-
-## 🎯 Objetivos
-
-El dashboard permite:
-
-✅ Comparar ventas vs cuotas
-
-✅ Identificar mejores y peores vendedores
-
-✅ Analizar tendencias trimestrales
-
-✅ Filtrar información por año
-
-✅ Visualizar desempeño geográfico
+</div>
 
 ---
 
-## 🛠 Herramientas utilizadas
+# 📌 Project Overview
 
-* Power BI Desktop
-* Power Query
-* DAX
-* Microsoft Access
-* Excel
+This project focuses on building a complete Business Intelligence solution in Power BI for a bike equipment company.
+
+The dashboard compares:
+
+* ✅ Actual Sales
+* ✅ Sales Quotas
+* ✅ Salesperson Performance
+* ✅ Quarterly Trends
+* ✅ Country Performance
 
 ---
 
-## 📂 Archivos utilizados
+# 🎯 Main Objectives
 
-### Base de datos
+✔ Analyze salesperson performance
+
+✔ Compare sales against quotas
+
+✔ Detect top and bottom performers
+
+✔ Visualize sales trends over time
+
+✔ Build an interactive dashboard using slicers and charts
+
+---
+
+# 🛠 Technologies Used
+
+| Tool             | Purpose                   |
+| ---------------- | ------------------------- |
+| Power BI Desktop | Dashboard creation        |
+| Power Query      | Data transformation       |
+| DAX              | Measures and calculations |
+| Microsoft Access | Data source               |
+| Excel            | Sales quotas              |
+
+---
+
+# 📂 Project Files
+
+```bash
+📁 UseCase1/
+ ├── SalesRepAnalysis.accdb
+ ├── SalesQuotas.xlsx
+ └── SalesRepAnalysis.pbix
+```
+
+---
+
+# 🧩 Data Model
+
+The project uses the following tables:
+
+| Table      | Description                    |
+| ---------- | ------------------------------ |
+| Rep        | Salespeople information        |
+| Territory  | Sales territories              |
+| Sales      | Sales transactions             |
+| Quotas     | Quarterly sales quotas         |
+| TimePeriod | Year and quarter relationships |
+
+---
+
+# 🔄 Data Transformation Process
+
+## 📥 Import Data
+
+Data was imported from:
+
+* Microsoft Access database
+* Excel workbook
+
+---
+
+## 🧹 Power Query Transformations
+
+### Rep Table
+
+* Filter sales employees
+* Create full name column
+
+### Sales Table
+
+* Convert OrderDateKey into date format
+* Create Year and Quarter columns
+* Group sales by:
+
+  * Employee
+  * Territory
+  * Year
+  * Quarter
+
+### Quotas Table
+
+* Append yearly sheets
+* Unpivot quarterly columns
+* Create TimePeriod field
+
+---
+
+# 🔗 Relationships
+
+The model relationships were created using:
 
 ```text
-SalesRepAnalysis.accdb
-```
-
-### Archivo de cuotas
-
-```text
-SalesQuotas.xlsx
+Rep[EmployeeKey] ↔ Sales[EmployeeKey]
+Territory[SalesTerritoryKey] ↔ Sales[SalesTerritoryKey]
+TimePeriod[TimePeriod] ↔ Sales[TimePeriod]
+TimePeriod[TimePeriod] ↔ Quotas[TimePeriod]
 ```
 
 ---
 
-## 🧩 Estructura del proyecto
-
-El desarrollo se divide en:
-
-1. Importación de datos
-2. Transformación de datos
-3. Creación del modelo relacional
-4. Creación de medidas DAX
-5. Diseño del dashboard
-
----
-
-# 📥 1. Importación de datos
-
-## Objetivo
-
-Crear un dashboard en Power BI para analizar:
-
-* Ventas reales
-* Cuotas de ventas
-* Rendimiento de vendedores
-* Comparación por trimestre y país
-
----
-
-# 1. Crear el archivo Power BI
-
-1. Abrir Power BI Desktop.
-2. Crear un nuevo archivo.
-3. Guardar como:
-
-```text
-SalesRepAnalysis.pbix
-```
-
----
-
-# 2. Importar datos desde Access
-
-## Archivo
-
-```text
-SalesRepAnalysis.accdb
-```
-
-## Tablas a importar
-
-| Tabla original | Nombre usado |
-| -------------- | ------------ |
-| Employee       | Rep          |
-| SalesTerritory | Territory    |
-| ResellerSales  | Sales        |
-
-Seleccionar:
-
-```text
-Transform Data
-```
-
----
-
-# 3. Transformaciones en Power Query
-
-## Tabla Rep
-
-Mantener columnas:
-
-* EmployeeKey
-* EmployeeNationalID
-* FirstName
-* LastName
-* MiddleName
-* Title
-
-### Crear columna Name
-
-Agregar columna personalizada:
-
-```powerquery
-FirstName & " " & LastName
-```
-
-Nombre:
-
-```text
-Name
-```
-
----
-
-## Tabla Territory
-
-Mantener:
-
-* SalesTerritoryKey
-* SalesTerritoryRegion
-* SalesTerritoryCountry
-* SalesTerritoryGroup
-
----
-
-## Tabla Sales
-
-Mantener:
-
-* OrderDateKey
-* EmployeeKey
-* SalesTerritoryKey
-* SalesAmount
-
----
-
-# 4. Crear columna OrderDate
-
-## Cambiar tipo de OrderDateKey
-
-Convertir:
-
-```text
-OrderDateKey
-```
-
-a:
-
-```text
-Text
-```
-
----
-
-## Crear columna personalizada
-
-```powerquery
-Date.FromText(Text.Start([OrderDateKey],4) & "-" &
-Text.Middle([OrderDateKey],4,2) & "-" &
-Text.End([OrderDateKey],2))
-```
-
-Nombre:
-
-```text
-OrderDate
-```
-
----
-
-# 5. Crear Year y Quarter
-
-## Year
-
-```powerquery
-Date.Year([OrderDate])
-```
-
-## Quarter
-
-```powerquery
-"Q" & Number.ToText(Date.QuarterOfYear([OrderDate]))
-```
-
----
-
-# 6. Agrupar ventas
-
-Agrupar por:
-
-* EmployeeKey
-* SalesTerritoryKey
-* Year
-* Quarter
-
-Sumando:
-
-```text
-SalesAmount
-```
-
----
-
-# 7. Crear TimePeriod
-
-```powerquery
-Text.From([Year]) & [Quarter]
-```
-
-Ejemplo:
-
-```text
-2014Q1
-```
-
-Eliminar columnas:
-
-* Year
-* Quarter
-
----
-
-# 8. Importar cuotas
-
-## Archivo Excel
-
-```text
-SalesQuotas.xlsx
-```
-
-Importar todas las hojas.
-
----
-
-# 9. Agregar columna Year a cada hoja
-
-Ejemplo para hoja 2014:
-
-```powerquery
-2014
-```
-
-Cambiar tipo de dato a:
-
-```text
-Text
-```
-
----
-
-# 10. Estructura correcta de cada hoja
-
-Todas las hojas deben tener:
-
-| SalesPerson | Year | Q1 | Q2 | Q3 | Q4 |
-| ----------- | ---- | -- | -- | -- | -- |
-
-Si falta alguna columna:
-
-```powerquery
-null
-```
-
----
-
-# 11. Append Queries
-
-Ir a:
-
-```text
-Home → Append Queries as New
-```
-
-Seleccionar todas las hojas.
-
-Nombre final:
-
-```text
-Quotas
-```
-
----
-
-# 12. Unpivot
-
-Seleccionar:
-
-* SalesPerson
-* Year
-
-Luego:
-
-```text
-Transform → Unpivot Other Columns
-```
-
----
-
-# 13. Renombrar columnas
-
-| Antes     | Después |
-| --------- | ------- |
-| Attribute | Quarter |
-| Value     | Quota   |
-
----
-
-# 14. Crear TimePeriod en Quotas
-
-```powerquery
-Text.From([Year]) & [Quarter]
-```
-
-Eliminar:
-
-* Year
-* Quarter
-
----
-
-# 15. Crear tabla Period
-
-Duplicar:
-
-```text
-Quotas
-```
-
-Nombre:
-
-```text
-TimePeriod
-```
-
-Eliminar:
-
-* SalesPerson
-* Quota
-
-Quitar duplicados usando:
-
-```text
-TimePeriod
-```
-
----
-
-# 16. Relaciones del modelo
-
-## Rep ↔ Sales
-
-```text
-EmployeeKey
-```
-
-## Territory ↔ Sales
-
-```text
-SalesTerritoryKey
-```
-
-## TimePeriod ↔ Sales
-
-```text
-TimePeriod
-```
-
-## TimePeriod ↔ Quotas
-
-```text
-TimePeriod
-```
-
----
-
-# 17. Medidas DAX
+# 📐 DAX Measures
 
 ## Total Sales
 
@@ -436,118 +158,84 @@ DIVIDE([Variance],[Total Quota],BLANK())
 
 ---
 
-# 18. Página 1 del Dashboard
+# 📊 Dashboard Pages
 
-## Visuales requeridos
+# 📄 Page 1 — Salesperson Performance
 
-### Slicer
+## Included Visuals
 
-Campo:
+* 📅 Year slicer
+* 📈 Stacked column chart
+* 💰 KPI cards
+* 📊 Clustered column chart
+* 🏷 Dashboard title
+
+---
+
+# 📄 Page 2 — Top & Bottom Analysis
+
+## Included Visuals
+
+* 📅 Year slicer
+* 👤 Salesperson slicer
+* 🥇 Top 5 salespeople table
+* 📉 Bottom 5 salespeople table
+* 📈 Sales vs Quota line chart
+
+---
+
+# 🏆 Results
+
+The dashboard successfully allows:
+
+✅ Real-time filtering
+
+✅ Sales performance comparison
+
+✅ Identification of high-performing salespeople
+
+✅ Detection of underperforming salespeople
+
+✅ Quarterly sales analysis
+
+---
+
+# 📷 Expected Dashboard Features
+
+* Interactive slicers
+* KPI indicators
+* Comparative charts
+* Trend analysis
+* Top/Bottom ranking tables
+
+---
+
+# 🚀 Future Improvements
+
+Possible future enhancements:
+
+* Geographic maps
+* Predictive analytics
+* AI-based insights
+* Automatic refresh
+* Advanced KPIs
+
+---
+
+# 👨‍💻 Author
+
+Juan Flores
+
+Engineering Student — Business Intelligence & Data Analytics
+
+---
+
+# ⭐ Final Notes
+
+This project demonstrates the implementation of a complete BI workflow:
 
 ```text
-Year
+Data Extraction → Transformation → Modeling → DAX → Visualization
 ```
 
----
-
-### Stacked Column Chart
-
-* Axis → Country
-* Legend → Quarter
-* Values → Total Sales
-
----
-
-### Cards
-
-* Total Sales
-* Total Quota
-* Variance
-* Percent Variance
-
----
-
-### Clustered Column Chart
-
-* Axis → Salesperson
-* Values → Total Sales y Total Quota
-
----
-
-### Título
-
-```text
-Salesperson Performance Dashboard
-```
-
----
-
-# 19. Página 2 del Dashboard
-
-## Agregar
-
-### Slicer Year
-
-### Slicer Salesperson
-
----
-
-# TOP 5
-
-Crear tabla con:
-
-* Salesperson
-* Total Sales
-* Total Quota
-* Percent Variance
-
-Aplicar filtro:
-
-```text
-Top N → 5
-```
-
-Usando:
-
-```text
-Percent Variance
-```
-
----
-
-# Bottom 5
-
-Duplicar la tabla anterior.
-
-Cambiar filtro a:
-
-```text
-Bottom N → 5
-```
-
----
-
-# Line Chart
-
-## Axis
-
-```text
-TimePeriod
-```
-
-## Values
-
-* Total Sales
-* Total Quota
-
----
-
-# Resultado esperado
-
-El dashboard permitirá:
-
-* Comparar ventas y cuotas
-* Analizar desempeño de vendedores
-* Ver mejores y peores vendedores
-* Filtrar por año
-* Visualizar ventas por trimestre
+using Microsoft Power BI.
