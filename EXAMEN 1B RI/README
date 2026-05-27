@@ -1,1 +1,160 @@
+# Sistema de Recuperación de Información - Rotten Tomatoes
 
+## Descripción
+
+Este proyecto implementa un Sistema de Recuperación de Información utilizando embeddings semánticos y similitud coseno sobre el dataset Rotten Tomatoes Movies and Critic Reviews Dataset.
+
+El sistema permite:
+- preprocesar documentos textuales;
+- generar embeddings mediante modelos Sentence Transformers;
+- recuperar documentos relevantes para consultas textuales;
+- comparar modelos de embeddings;
+- visualizar embeddings mediante PCA.
+
+---
+
+# Objetivos
+
+El proyecto fue desarrollado como parte del examen de Recuperación de Información.
+
+Se implementaron los siguientes componentes:
+
+- Preprocesamiento textual
+- Generación de embeddings
+- Recuperación mediante similitud coseno
+- Ranking Top-K
+- Benchmark de consultas
+- Comparación de modelos
+- Visualización PCA
+
+---
+
+# Dataset
+
+Se utilizaron los siguientes archivos del dataset Rotten Tomatoes:
+
+- `rotten_tomatoes_movies.csv`
+- `rotten_tomatoes_critic_reviews.csv`
+
+---
+
+# Tecnologías utilizadas
+
+- Python
+- Pandas
+- NumPy
+- Scikit-learn
+- Sentence Transformers
+- NLTK
+- Matplotlib
+
+---
+
+# Instalación
+
+## 1. Clonar repositorio
+
+```bash
+git clone https://github.com/USUARIO/REPOSITORIO.git
+cd REPOSITORIO
+```
+
+## 2. Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# Ejecución
+
+Abrir Jupyter Notebook:
+
+```bash
+jupyter notebook
+```
+
+Ejecutar el archivo:
+
+```text
+ApellidoNombre_ex1bim_ir26a.ipynb
+```
+
+---
+
+# Preprocesamiento implementado
+
+El pipeline de preprocesamiento incluye:
+
+- Conversión a minúsculas
+- Eliminación de signos de puntuación
+- Eliminación de espacios redundantes
+- Eliminación de números
+- Eliminación de stopwords
+- Lematización
+
+---
+
+# Modelos de Embeddings utilizados
+
+## Modelo 1
+- `all-MiniLM-L6-v2`
+
+## Modelo 2
+- `paraphrase-MiniLM-L3-v2`
+
+---
+
+# Recuperación de Información
+
+El sistema:
+
+1. Recibe una consulta textual
+2. Genera embeddings de la consulta
+3. Calcula similitud coseno
+4. Recupera documentos Top-K ordenados por similitud
+
+---
+
+# Benchmark de consultas
+
+Se ejecutaron las siguientes consultas:
+
+- Q1 science fiction movie with advanced technology
+- Q2 romantic story with emotional relationships
+- Q3 action movie with intense fight scenes
+- Q4 horror film that creates fear and suspense
+- Q5 visually impressive movie with weak storyline
+- Q6 emotionally moving performance by the lead actor
+- Q7 predictable plot but entertaining experience
+- Q8 movie praised by critics but unpopular with audiences
+
+---
+
+# Mejora implementada
+
+Se implementaron dos mejoras adicionales:
+
+## Comparación de modelos de embeddings
+Se compararon dos modelos Sentence Transformers para analizar diferencias en recuperación semántica.
+
+## Visualización PCA
+Se aplicó reducción dimensional PCA para visualizar la distribución espacial de embeddings en 2 dimensiones.
+
+---
+
+# Resultados
+
+El sistema logró recuperar documentos relevantes para las consultas propuestas utilizando similitud semántica basada en embeddings.
+
+La comparación entre modelos mostró diferencias en distribución vectorial y comportamiento de recuperación.
+
+---
+
+# Autor
+
+Juan Flores
+
+Escuela Politécnica Nacional  
+Ingeniería en Computación
