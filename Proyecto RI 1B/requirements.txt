@@ -1,0 +1,18 @@
+
+Requirimientos para el proyecto:
+
+NOTA: ADAPTAR LA RUTA DEL CORPUS
+
+EL embeddings_cache.npy SE DESCARGA EN LA PRIMERA EJECUCIÓN DEL CÓDIGO
+
+pandas
+numpy
+scikit-learn
+rank_bm25
+sentence-transformers
+faiss-cpu
+tabulate
+colorama
+nltk
+
+pip install -r requirements.txt
