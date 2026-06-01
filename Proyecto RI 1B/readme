@@ -1,5 +1,9 @@
 # Sistema Multicorpus de Recuperación de Información (SRI)
 
+INTEGRANTES: JUAN FLORES
+             MATEO MACAS
+             JORGE BÓSQUEZ
+
 Este repositorio contiene la implementación completa de un **Sistema de Recuperación de Información (SRI)** interactivo diseñado para indexar, buscar y evaluar múltiples colecciones de datos concurrentemente. El sistema unifica las variantes del famoso corpus periodístico **Reuters-21578** (`ModApte`, `ModHayes` y `ModLewis`), consolidando una base de conocimiento real de más de **10,000 documentos**.
 
 El proyecto permite contrastar empíricamente el rendimiento de los modelos clásicos basados en emparejamiento léxico de términos (operaciones de conjuntos, conteos vectoriales y probabilísticos) frente a arquitecturas modernas de recuperación semántica densa basada en Transformers y bases de datos vectoriales.
