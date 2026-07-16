@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>arXiv RAG Chat</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, Arial, sans-serif; max-width: 800px; margin: 30px auto; background: #0e1117; color: #e6e6e6; }
+  h1 { font-size: 1.4rem; }
+  #chat { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+  .msg { padding: 12px 16px; border-radius: 10px; line-height: 1.4; white-space: pre-wrap; }
+  .user { background: #1f2937; align-self: flex-end; }
+  .assistant { background: #14532d; align-self: flex-start; }
+  .evidence { margin-top: 8px; font-size: 0.85rem; color: #9ca3af; border-top: 1px solid #374151; padding-top: 8px; }
+  .evidence details { cursor: pointer; }
+  form { display: flex; gap: 8px; }
+  input[type=text] { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #374151; background: #1f2937; color: white; }
+  button { padding: 10px 18px; border-radius: 8px; border: none; background: #2563eb; color: white; cursor: pointer; }
+  button:disabled { opacity: 0.5; }
+  #status { font-size: 0.85rem; color: #9ca3af; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+  <h1>📚 RAG Chat — arXiv Paper Abstracts (versión Flask)</h1>
+  <p id="status"></p>
+  <div id="chat"></div>
+  <form id="form">
+    <input type="text" id="query" placeholder="Escribe tu consulta..." autocomplete="off" required />
+    <button type="submit" id="send">Enviar</button>
+  </form>
+
+  <script>
+    const chatEl = document.getElementById("chat");
+    const form = document.getElementById("form");
+    const input = document.getElementById("query");
+    const sendBtn = document.getElementById("send");
+    const statusEl = document.getElementById("status");
+
+    function addMessage(role, text) {
+      const div = document.createElement("div");
+      div.className = "msg " + role;
+      div.textContent = text;
+      chatEl.appendChild(div);
+      window.scrollTo(0, document.body.scrollHeight);
+      return div;
+    }
+
+    function addEvidence(container, evidence) {
+      if (!evidence || evidence.length === 0) return;
+      const wrap = document.createElement("div");
+      wrap.className = "evidence";
+      const details = document.createElement("details");
+      const summary = document.createElement("summary");
+      summary.textContent = `📎 Ver ${evidence.length} evidencias utilizadas`;
+      details.appendChild(summary);
+      evidence.forEach((e, i) => {
+        const p = document.createElement("p");
+        p.innerHTML = `<b>[${i + 1}] ${e.title}</b> (score: ${e.score})<br>${e.abstract}...`;
+        details.appendChild(p);
+      });
+      wrap.appendChild(details);
+      container.appendChild(wrap);
+    }
+
+    form.addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      const query = input.value.trim();
+      if (!query) return;
+      addMessage("user", query);
+      input.value = "";
+      sendBtn.disabled = true;
+      statusEl.textContent = "Buscando evidencias y generando respuesta...";
+
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
+        });
+        const data = await res.json();
+        if (data.error) {
+          addMessage("assistant", "❌ Error: " + data.error);
+        } else {
+          const el = addMessage("assistant", data.answer);
+          addEvidence(el, data.evidence);
+        }
+      } catch (err) {
+        addMessage("assistant", "❌ No se pudo contactar al servidor: " + err);
+      } finally {
+        statusEl.textContent = "";
+        sendBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
